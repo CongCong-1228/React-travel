@@ -1,0 +1,18 @@
+.partners {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 30px;
+    background-color: white;
+}
+
+.images {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.images > img{
+    margin-right: 20px;
+    object-fit: contain;
+}
