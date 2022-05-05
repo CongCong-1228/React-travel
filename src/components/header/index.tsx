@@ -3,8 +3,11 @@ import {Layout, Typography, Input, Dropdown, Button, Menu} from 'antd'
 import {GlobalOutlined} from '@ant-design/icons'
 import styles from './index.module.css'
 import logo from '../../assets/logo.svg'
+import {useLocation, useNavigate} from "react-router-dom";
 
 export const Header: React.FC = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
     return (
         <>
             <div className={styles.appHeader}>
@@ -24,8 +27,12 @@ export const Header: React.FC = () => {
                         >语言
                         </Dropdown.Button>
                         <Button.Group className={styles.buttonGroup}>
-                            <Button>注册</Button>
-                            <Button>登录</Button>
+                            <Button onClick={() => {
+                                navigate('/register')
+                            }}>注册</Button>
+                            <Button onClick={() => {
+                                navigate('/login')
+                            }}>登录</Button>
                         </Button.Group>
                     </div>
                 </div>
@@ -39,7 +46,7 @@ export const Header: React.FC = () => {
                     </Input.Search>
                 </Layout.Header>
 
-                <Menu mode='horizontal' className={styles.mainMenu} >
+                <Menu mode='horizontal' className={styles.mainMenu}>
                     <Menu.Item key='1'>旅游首页</Menu.Item>
                     <Menu.Item key='2'>周末游</Menu.Item>
                     <Menu.Item key='3'>跟团游</Menu.Item>
