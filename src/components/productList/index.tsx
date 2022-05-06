@@ -5,11 +5,11 @@ import {Production} from './production'
 
 interface PropsType {
     title: JSX.Element // JSX元素
-    silderImage: string
+    sliderImage: string
     productions: { id: string | number, title: string, price: string | number, touristRoutePictures: { url: string }[] }[]
 }
 
-export const ProductList: React.FC<PropsType> = ({title, silderImage, productions}) => {
+export const ProductList: React.FC<PropsType> = ({title, sliderImage, productions}) => {
     return (
         <div className={styles.content}>
             <Divider orientation='left'>
@@ -17,7 +17,7 @@ export const ProductList: React.FC<PropsType> = ({title, silderImage, production
             </Divider>
             <Row>
                 <Col span={4}>
-                    <Image src={silderImage} className={styles.sideImage} height={720}></Image>
+                    <Image src={sliderImage} className={styles.sideImage} height={720}/>
                     {/*<img src={silderImage} alt=""/>*/}
                 </Col>
                 <Col span={20}>

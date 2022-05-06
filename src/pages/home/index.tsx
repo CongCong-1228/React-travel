@@ -23,17 +23,17 @@ export class Home extends React.Component {
                     </Row>
                     <ProductList
                         title={<Typography.Title type='warning' level={3}>爆款推荐</Typography.Title>}
-                        silderImage={sider1}
+                        sliderImage={sider1}
                         productions={productList1}
                     />
                     <ProductList
                         title={<Typography.Title type='danger' level={3}>新品上市</Typography.Title>}
-                        silderImage={sider2}
+                        sliderImage={sider2}
                         productions={productList2}
                     />
                     <ProductList
                         title={<Typography.Title type='success' level={3}>国内游推荐</Typography.Title>}
-                        silderImage={sider3}
+                        sliderImage={sider3}
                         productions={productList3}
                     />
 
