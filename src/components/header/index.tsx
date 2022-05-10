@@ -1,13 +1,53 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Layout, Typography, Input, Dropdown, Button, Menu} from 'antd'
 import {GlobalOutlined} from '@ant-design/icons'
 import styles from './index.module.css'
 import logo from '../../assets/logo.svg'
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import store from '../../redux/store';
+import {LanguageProps} from '../../redux/languageReducer';
+import {AddModal} from "./addModal";
+
+interface State extends LanguageProps {
+}
 
 export const Header: React.FC = () => {
-    const location = useLocation()
     const navigate = useNavigate()
+    const state: State = store.getState();
+    const [language, setLanguage] = useState(state.language)
+    const [languageList, setLanguageList] = useState(state.languageList)
+    const [addModalVisible, setAddModalVisible] = useState(false)
+
+    store.subscribe(() => {
+        setLanguage(store.getState().language)
+        setLanguageList(store.getState().languageList)
+    })
+
+    const Lang = (language) => {
+        switch (language) {
+            case 'zh':
+                return '中文'
+            case 'en':
+                return '英文'
+            case 'fa':
+                return '法文'
+            default:
+                return '不知名语言'
+        }
+    }
+
+    const handleMenuClick = (e) => {
+        if (e.key === 'new') {
+            setAddModalVisible(true)
+        } else {
+            store.dispatch({
+                type: 'language_change',
+                payload: {
+                    language: e.key
+                }
+            })
+        }
+    }
     return (
         <>
             <div className={styles.appHeader}>
@@ -19,13 +59,19 @@ export const Header: React.FC = () => {
                         <Dropdown.Button
                             style={{marginLeft: 15}}
                             overlay={
-                                <Menu>
-                                    <Menu.Item>中文</Menu.Item>
-                                    <Menu.Item>English</Menu.Item>
+                                <Menu onClick={handleMenuClick}>
+                                    {languageList.map(l => {
+                                        return (<Menu.Item key={l.code}>{l.name}</Menu.Item>)
+                                    })}
+                                    <Menu.Item key='new'>添加新语言</Menu.Item>
                                 </Menu>}
                             icon={<GlobalOutlined/>}
-                        >语言
+                        >{
+                            Lang(language)
+                        }
                         </Dropdown.Button>
+                        {addModalVisible &&
+                        <AddModal addModalVisible={addModalVisible} setAddModalVisible={setAddModalVisible}/>}
                         <Button.Group className={styles.buttonGroup}>
                             <Button onClick={() => {
                                 navigate('/register')
@@ -45,7 +91,6 @@ export const Header: React.FC = () => {
                                   className={styles.searchInput}>
                     </Input.Search>
                 </Layout.Header>
-
                 <Menu mode='horizontal' className={styles.mainMenu}>
                     <Menu.Item key='1'>旅游首页</Menu.Item>
                     <Menu.Item key='2'>周末游</Menu.Item>

@@ -1,4 +1,4 @@
-interface LanguageProps {
+export interface LanguageProps {
     language: 'zh' | 'en',
     languageList: { name: string, code: string }[]
 }
@@ -10,6 +10,15 @@ const defaultLanguage: LanguageProps = {
 
 
 const LanguageReducer = (state = defaultLanguage, action) => {
+    if (action.type === 'language_change') {
+        return {...state, language: action.payload.language}
+    }
+    if (action.type === 'language_add') {
+        return {
+            ...state,
+            languageList: [...state.languageList, {name: action.payload.language, code: action.payload.code}]
+        }
+    }
     return state
 }
 
