@@ -1,3 +1,5 @@
+import i18n from "i18next";
+
 export interface LanguageProps {
     language: 'zh' | 'en',
     languageList: { name: string, code: string }[]
@@ -10,16 +12,18 @@ const defaultLanguage: LanguageProps = {
 
 
 const LanguageReducer = (state = defaultLanguage, action) => {
-    if (action.type === 'language_change') {
-        return {...state, language: action.payload.language}
+    switch (action.type) {
+        case 'language_change':
+            i18n.changeLanguage(action.payload.language).then()
+            return {...state, language: action.payload.language}
+        case 'language_add':
+            return {
+                ...state,
+                languageList: [...state.languageList, {name: action.payload.language, code: action.payload.code}]
+            }
+        default:
+            return {...state}
     }
-    if (action.type === 'language_add') {
-        return {
-            ...state,
-            languageList: [...state.languageList, {name: action.payload.language, code: action.payload.code}]
-        }
-    }
-    return state
 }
 
 export default LanguageReducer
