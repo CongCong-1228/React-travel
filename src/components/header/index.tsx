@@ -8,21 +8,25 @@ import store from '../../redux/store';
 import {LanguageProps} from '../../redux/languageReducer';
 import {AddModal} from "./addModal";
 import {useTranslation} from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
 
-interface State extends LanguageProps {}
+interface State extends LanguageProps {
+}
 
 export const Header: React.FC = () => {
     const navigate = useNavigate()
     const state: State = store.getState();
-    const [language, setLanguage] = useState(state.language)
-    const [languageList, setLanguageList] = useState(state.languageList)
+    // const [language, setLanguage] = useState(state.language)
+    // const [languageList, setLanguageList] = useState(state.languageList)
     const [addModalVisible, setAddModalVisible] = useState(false)
     const {t} = useTranslation()
-
-    store.subscribe(() => {
-        setLanguage(store.getState().language)
-        setLanguageList(store.getState().languageList)
-    })
+    const language = useSelector((state: State) => state.language);
+    const languageList = useSelector((state: State) => state.languageList);
+    const dispatch = useDispatch();
+    // store.subscribe(() => {
+    //     setLanguage(store.getState().language)
+    //     setLanguageList(store.getState().languageList)
+    // })
 
     const Lang = (language) => {
         switch (language) {
@@ -41,7 +45,7 @@ export const Header: React.FC = () => {
         if (e.key === 'new') {
             setAddModalVisible(true)
         } else {
-            store.dispatch({
+            dispatch({
                 type: 'language_change',
                 payload: {
                     language: e.key

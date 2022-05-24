@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {Modal} from 'antd';
-import store from '../../redux/store';
 import {useDispatch, useSelector, useStore} from 'react-redux';
+
 
 interface addModalProps {
     addModalVisible: boolean,
@@ -12,7 +12,6 @@ export const AddModal: React.FC<addModalProps> = ({addModalVisible, setAddModalV
     const [inputStringValue, setInputStringValue] = useState('')
     const [inputCodeValue, setInputCodeValue] = useState('')
     const dispatch = useDispatch()
-    const store = useStore()
 
 
     const handleStringOnChange = (e) => {
@@ -23,7 +22,7 @@ export const AddModal: React.FC<addModalProps> = ({addModalVisible, setAddModalV
     }
 
     const handleOk = (inputStringValue, inputCodeValue) => {
-        store.dispatch({
+        dispatch({
             type: 'language_add',
             payload: {
                 language: inputStringValue,
@@ -46,3 +45,6 @@ export const AddModal: React.FC<addModalProps> = ({addModalVisible, setAddModalV
         </Modal>
     )
 }
+
+
+
