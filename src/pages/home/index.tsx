@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
-import {Header, Footer, SideMenu, Carousel, ProductList, BusinessPartners} from '../../components'
-import {Row, Col, Typography, Spin} from 'antd'
+import {BusinessPartners, Carousel, Footer, Header, ProductList, SideMenu} from '../../components'
+import {Col, Row, Spin, Typography} from 'antd'
 // import {productList1, productList2, productList3} from '../../mock'
 import slider1 from '../../assets/images/sider_2019_12-09.png'
 import slider2 from '../../assets/images/sider_2019_02-04-2.png'
@@ -9,6 +9,11 @@ import slider3 from '../../assets/images/sider_2019_02-04.png'
 import {withTranslation, WithTranslation} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
+import {
+    FetchRecommendProductFailActionCreator,
+    FetchRecommendProductStartActionCreator,
+    FetchRecommendProductSuccessActionCreator
+} from "../../redux/production/productionActions";
 
 interface State {
     productList: any[],
@@ -16,8 +21,32 @@ interface State {
     error: string | null,
 }
 
+const mapStateToProps = (state) => {
+    return {
+        loading: state.production.loading,
+        error: state.production.error,
+        productionList: state.production.productionList,
+    }
+}
 
-class HomePage extends React.Component<WithTranslation, State> {
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchStart: () => {
+            dispatch(FetchRecommendProductStartActionCreator());
+        },
+        fetchSuccess: (data) => {
+            dispatch(FetchRecommendProductSuccessActionCreator(data));
+        },
+        fetchFail: (error) => {
+            dispatch(FetchRecommendProductFailActionCreator(error));
+        }
+    }
+}
+
+type PropsType = WithTranslation & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+
+
+class HomePage extends React.Component<PropsType, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -106,4 +135,5 @@ class HomePage extends React.Component<WithTranslation, State> {
     }
 }
 
-export const Home = withTranslation()(HomePage)
+
+export const Home = connect()(withTranslation()(HomePage))

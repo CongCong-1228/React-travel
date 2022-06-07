@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import {Layout, Typography, Input, Dropdown, Button, Menu} from 'antd'
+import {Button, Dropdown, Input, Layout, Menu, Typography} from 'antd'
 import {GlobalOutlined} from '@ant-design/icons'
 import styles from './index.module.css'
 import logo from '../../assets/logo.svg'
 import {useNavigate} from "react-router-dom";
 import store from '../../redux/store';
-import {LanguageProps} from '../../redux/languageReducer';
+import {LanguageProps} from '../../redux/language/languageReducer';
 import {AddModal} from "./addModal";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
@@ -15,18 +15,13 @@ interface State extends LanguageProps {
 
 export const Header: React.FC = () => {
     const navigate = useNavigate()
-    const state: State = store.getState();
-    // const [language, setLanguage] = useState(state.language)
-    // const [languageList, setLanguageList] = useState(state.languageList)
+    const state = store.getState();
     const [addModalVisible, setAddModalVisible] = useState(false)
     const {t} = useTranslation()
-    const language = useSelector((state: State) => state.language);
-    const languageList = useSelector((state: State) => state.languageList);
+    const language = useSelector((state: any) => state.language.language);
+    const languageList = useSelector((state: any) => state.language.languageList);
     const dispatch = useDispatch();
-    // store.subscribe(() => {
-    //     setLanguage(store.getState().language)
-    //     setLanguageList(store.getState().languageList)
-    // })
+
 
     const Lang = (language) => {
         switch (language) {
@@ -76,7 +71,7 @@ export const Header: React.FC = () => {
                         }
                         </Dropdown.Button>
                         {addModalVisible &&
-                        <AddModal addModalVisible={addModalVisible} setAddModalVisible={setAddModalVisible}/>}
+                            <AddModal addModalVisible={addModalVisible} setAddModalVisible={setAddModalVisible}/>}
                         <Button.Group className={styles.buttonGroup}>
                             <Button onClick={() => {
                                 navigate('/register')
