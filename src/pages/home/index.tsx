@@ -8,18 +8,8 @@ import slider2 from '../../assets/images/sider_2019_02-04-2.png'
 import slider3 from '../../assets/images/sider_2019_02-04.png'
 import {withTranslation, WithTranslation} from "react-i18next";
 import {connect} from "react-redux";
-import axios from "axios";
-import {
-    FetchRecommendProductFailActionCreator,
-    FetchRecommendProductStartActionCreator,
-    FetchRecommendProductSuccessActionCreator
-} from "../../redux/production/productionActions";
+import {giveMeDataActionCreator} from "../../redux/production/productionActions";
 
-interface State {
-    productList: any[],
-    loading: boolean,
-    error: string | null,
-}
 
 const mapStateToProps = (state) => {
     return {
@@ -31,14 +21,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchStart: () => {
-            dispatch(FetchRecommendProductStartActionCreator());
-        },
-        fetchSuccess: (data) => {
-            dispatch(FetchRecommendProductSuccessActionCreator(data));
-        },
-        fetchFail: (error) => {
-            dispatch(FetchRecommendProductFailActionCreator(error));
+        dispatch: dispatch,
+        giveMeData: () => {
+            dispatch(giveMeDataActionCreator())
         }
     }
 }
@@ -46,39 +31,18 @@ const mapDispatchToProps = (dispatch) => {
 type PropsType = WithTranslation & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 
-class HomePage extends React.Component<PropsType, State> {
+class HomePage extends React.Component<PropsType> {
     constructor(props) {
         super(props);
-        this.state = {
-            productList: [],
-            loading: true,
-            error: null,
-        }
     }
 
-    getData = async () => {
-        try {
-            const response = await axios.get('http://123.56.149.216:8080/api/productCollections')
-            this.setState({
-                productList: response.data,
-                loading: false,
-            })
-        } catch (error: any) {
-            this.setState({
-                error: error.message,
-                loading: false
-            })
-        }
-
-    }
 
     componentDidMount() {
-        this.getData();
+        this.props.giveMeData();
     }
 
     render() {
-        const {t} = this.props
-        const {productList, loading, error} = this.state
+        const {t, productionList, loading, error} = this.props
         if (loading) {
             return (
                 <Spin size="large"
@@ -112,19 +76,19 @@ class HomePage extends React.Component<PropsType, State> {
                         title={<Typography.Title type='warning'
                                                  level={3}>{t("home_page.hot_recommended")}</Typography.Title>}
                         sliderImage={slider1}
-                        productions={productList[0].touristRoutes}
+                        productions={productionList[0].touristRoutes}
                     />
                     <ProductList
                         title={<Typography.Title type='danger'
                                                  level={3}>{t("home_page.new_arrival")}</Typography.Title>}
                         sliderImage={slider2}
-                        productions={productList[1].touristRoutes}
+                        productions={productionList[1].touristRoutes}
                     />
                     <ProductList
                         title={<Typography.Title type='success'
                                                  level={3}>{t("home_page.domestic_travel")}</Typography.Title>}
                         sliderImage={slider3}
-                        productions={productList[2].touristRoutes}
+                        productions={productionList[2].touristRoutes}
                     />
 
                 </div>
@@ -136,4 +100,4 @@ class HomePage extends React.Component<PropsType, State> {
 }
 
 
-export const Home = connect()(withTranslation()(HomePage))
+export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation()(HomePage))
